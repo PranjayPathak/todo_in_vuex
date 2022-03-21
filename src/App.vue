@@ -1,5 +1,6 @@
 <script>
 import TaskCell from "./components/TaskCell.vue";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "App",
   data() {
@@ -7,21 +8,12 @@ export default {
       newTask: "",
     };
   },
-  computed: {
-    demoTasks() {
-      return this.$store.state.demoTasks;
-    },
-  },
+  computed: { ...mapState(["demoTasks"]) },
+
   methods: {
     addTask() {
       this.$store.dispatch("addTask", this.newTask);
       this.newTask = ""; //reset task in input
-    },
-    deleteTask(taskId) {
-      this.$store.dispatch("deleteTask", taskId);
-    },
-    toggleStatus(taskId) {
-      this.$store.dispatch("toggleStatus", taskId);
     },
     editTask(taskId) {
       this.demoTasks.map((task) => {
@@ -32,6 +24,7 @@ export default {
         }
       });
     },
+    ...mapActions(["deleteTask", "toggleStatus"]),
   },
   components: { TaskCell },
 };
