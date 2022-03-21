@@ -1,9 +1,7 @@
 <script>
 import TaskCell from "./components/TaskCell.vue";
-// import store from "./store/";
 export default {
   name: "App",
-  // store: store,
   data() {
     return {
       newTask: "",
@@ -19,7 +17,12 @@ export default {
       this.$store.dispatch("addTask", this.newTask);
       this.newTask = ""; //reset task in input
     },
-
+    deleteTask(taskId) {
+      this.$store.dispatch("deleteTask", taskId);
+    },
+    toggleStatus(taskId) {
+      this.$store.dispatch("toggleStatus", taskId);
+    },
     editTask(taskId) {
       this.demoTasks.map((task) => {
         if (task.id === taskId) {
@@ -55,7 +58,12 @@ export default {
         </form>
       </div>
       <div class="p-1" v-for="task in demoTasks" v-bind:key="task.id">
-        <TaskCell v-bind:task="task" v-on:editTask="editTask($event)" />
+        <TaskCell
+          v-bind:task="task"
+          v-on:delTask="deleteTask($event)"
+          v-on:toggleStatus="toggleStatus($event)"
+          v-on:editTask="editTask($event)"
+        />
       </div>
     </div>
   </div>

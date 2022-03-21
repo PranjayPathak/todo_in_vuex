@@ -6,17 +6,23 @@ export default {
       required: true,
     },
   },
+  computed: {
+    isCompleted() {
+      return this.task.isCompleted;
+    },
+    todoData() {
+      return this.task.data;
+    },
+  },
   methods: {
     deleteTask() {
-      this.$store.dispatch("deleteTask", this.task.id);
-      // this.$emit("delTask", this.task.id);
+      this.$emit("delTask", this.task.id);
     },
     editTask() {
       this.$emit("editTask", this.task.id);
     },
     toggleStatus() {
-      this.$store.dispatch("toggleStatus", this.task.id);
-      // this.$emit("toggleStatus", this.task.id);
+      this.$emit("toggleStatus", this.task.id);
     },
   },
 };
@@ -31,20 +37,20 @@ export default {
           type="checkbox"
           id="done"
           value="true"
-          v-bind:checked="task.isCompleted"
+          v-bind:checked="isCompleted"
           v-on:click="toggleStatus"
         />
         <p
           class="color-black container body-lg"
-          v-bind:class="{ strike: task.isCompleted }"
+          v-bind:class="{ strike: isCompleted }"
         >
-          {{ task.data }}
+          {{ todoData }}
         </p>
       </div>
       <div class="flex_container taskcell_inputs">
         <button
           class="btn primary sm my-2"
-          v-bind:disabled="task.isCompleted"
+          v-bind:disabled="isCompleted"
           v-on:click="editTask"
         >
           Edit

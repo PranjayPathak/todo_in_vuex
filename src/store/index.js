@@ -28,19 +28,11 @@ export default createStore({
   getters: {},
   mutations: {
     addTask: (state, newTask) => {
-      let check = true; //flag to check if task already exists
-      state.demoTasks.map((task) => {
-        if (task.data === newTask) {
-          check = false;
-        }
+      state.demoTasks.unshift({
+        data: newTask,
+        id: Date.now(),
+        isCompleted: false,
       });
-      if (check) {
-        state.demoTasks.unshift({
-          data: newTask,
-          id: Date.now(),
-          isCompleted: false,
-        });
-      }
     },
     deleteTask: (state, taskId) => {
       state.demoTasks = state.demoTasks.filter((task) => {
@@ -51,7 +43,7 @@ export default createStore({
     toggleStatus(state, taskId) {
       state.demoTasks.forEach((task) => {
         if (task.id === taskId) {
-          //Toggling isComplete status
+          //toggling isComplete status
           task.isCompleted = !task.isCompleted;
         }
       });
@@ -59,7 +51,15 @@ export default createStore({
   },
   actions: {
     addTask: (context, newTask) => {
-      context.commit("addTask", newTask);
+      let check = true; //flag to check if task already exists
+      context.state.demoTasks.map((task) => {
+        if (task.data === newTask) {
+          check = false;
+        }
+      });
+      if (check) {
+        context.commit("addTask", newTask);
+      }
     },
     deleteTask: (context, taskId) => {
       context.commit("deleteTask", taskId);
